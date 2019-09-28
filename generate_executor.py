@@ -78,11 +78,11 @@ else:
     with open(template, "r") as template_file:
         with open(executor, "w") as executor_file:
             for line in template_file:
-                if "//INCLUDE_OPERATORS" in line:
+                if "//INCLUDE_OPERATOR" in line:
                     tabulation = line[0:line.find("//")]
 
-                    for operator in operators:
-                        executor_file.write(tabulation + "#include \"operators/" + operator + "/operator.h\"\n")
+                    name = line[line.find("//") + len("//INCLUDE_OPERATOR "):].strip()
+                    executor_file.write(tabulation + "#include \"operators/" + name + "/operator.h\"\n")
                 elif "//INIT_VARIABLES" in line:
                     tabulation = line[0:line.find("//")]
 

@@ -38,6 +38,8 @@ else:
                     backup.write(line)
     
     operator_extra_code = """
+            cfunction = lambda *args: None
+
             import os
 
             if not os.path.isdir("operators"):

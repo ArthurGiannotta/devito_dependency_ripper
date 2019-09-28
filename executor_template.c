@@ -1,5 +1,5 @@
 #include <stdio.h>
-//INCLUDE_OPERATORS
+//INCLUDE_OPERATOR Kernel
 
 // Allocates memory for the data used by the devito operator
 void create_dataobj(struct dataobj* object, const char* filename)
