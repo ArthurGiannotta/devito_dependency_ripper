@@ -1,0 +1,11 @@
+# Devito Dependency Ripper
+
+This program is designed to rip the dependency of Devito to execute an operator.
+
+1.  Execute "setup.py" inside the devito environment. This modifies the current devito installation. If you want to restore the old devito files, run "setup.py -restore".
+2.  Modify the file "operators.py" as desired. This file should define and run the operators to be saved for future execution. Since devito has been modified, the operators will not actually run in python anymore, but will be saved for future execution using C.
+3. If you want to save data from the operator, you should change the file "executor_template.c" to include a line "//SAVE_VARIABLE var_name", as is shown in the example template. You should also make an operator capable of saving data. An example of a variable that can be saved is "u = TimeFunction(name="u", grid=model.grid, save=Buffer(30))". Note the argument "save = Buffer(30)", meaning that the last 30 values of "u" will be saved. There are also other ways of saving data, for example, creating a ConditionalDimension and adding an equation to save data in this dimension.
+4.  Execute "generate_executor.py" to automatically generate a file "executor.c", which allocates memory for the dataobjs from devito and initializes the constants used by the operator.
+5. If your operator code is complex, you can manually change the file "executor_template.c" to fit your desires. For example, "executor_template2.c" is a template for RTM, based on the second seismic tutorial of devito.
+6.  Compile and run "executor.c" using the necessary flags. This is a problem because devito can sometimes use libraries that need to be passed as parameter to the compiler. One common example is "-lm -std=c99", but that can change and must be guessed manually by looking at the operator.h code and identifying used libraries.
+7. You can automatically build and run the operator by using "generate_executor.py -run". The script "plot.py" plots the saved data using matplotlib. Example usage: "python3 plot.py u" to plot the "u" variable. An extra argument "-animate 60" can be used to make an animation with 60 FPS (remember to install ffmpeg with "sudo apt install ffmpeg"). An extra argument "-static" can be used to plot a static image (independent of time), such as plot records. "-invert" is used to invert the Y axis.
